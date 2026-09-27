@@ -35,6 +35,7 @@ let
 
       cat << EOF > $out/bin/polymc
 #!/usr/bin/env bash
+export LD_LIBRARY_PATH="/run/opengl-driver/lib:${pkgs.libglvnd}/lib:${pkgs.glfw3-minecraft}/lib:${pkgs.openal}/lib:${pkgs.libxxf86vm}/lib:/run/current-system/sw/share/nix-ld/lib:\$LD_LIBRARY_PATH"
 exec $out/opt/polymc/AppDir/AppRun "\$@"
 EOF
       chmod +x $out/bin/polymc
