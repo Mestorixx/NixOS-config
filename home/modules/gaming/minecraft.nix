@@ -17,11 +17,40 @@ let
         --add-flags "-jar $out/share/java/launcher.jar"
     '';
   };
+
+  polymc = pkgs.stdenv.mkDerivation rec {
+    pname = "polymc";
+    version = "7.1";
+    src = pkgs.fetchurl {
+      url = "https://github.com/PolyMC/PolyMC/releases/download/${version}/PolyMC-Linux-amd64-${version}.AppImage";
+      hash = "sha256-teTAqhXWkdDrJvvsGeXoeUpX/LbMCTsitLWIXFL4Jgg=";
+    };
+    dontUnpack = true;
+    installPhase = ''
+      mkdir -p $out/bin $out/opt/polymc $out/share/applications $out/share/icons/hicolor/scalable/apps
+      cp $src app.bin
+      chmod +x app.bin
+      ./app.bin --appimage-extract
+      cp -r AppDir $out/opt/polymc/
+
+      cat << EOF > $out/bin/polymc
+#!/usr/bin/env bash
+exec $out/opt/polymc/AppDir/AppRun "\$@"
+EOF
+      chmod +x $out/bin/polymc
+
+      cp $out/opt/polymc/AppDir/org.polymc.PolyMC.desktop $out/share/applications/polymc.desktop
+      cp $out/opt/polymc/AppDir/org.polymc.PolyMC.svg $out/share/icons/hicolor/scalable/apps/polymc.svg
+      sed -i "s|Icon=.*|Icon=polymc|" $out/share/applications/polymc.desktop
+      sed -i "s|Exec=.*|Exec=$out/bin/polymc|" $out/share/applications/polymc.desktop
+    '';
+  };
 in
 {
   home.packages = with pkgs; [
     temurin-bin-17
     prismlauncher
+    polymc
     pirateLauncher
   ];
 
