@@ -21,7 +21,6 @@ in
 {
   home.packages = with pkgs; [
     temurin-bin-17
-    temurin-bin-21
     prismlauncher
     pirateLauncher
   ];
