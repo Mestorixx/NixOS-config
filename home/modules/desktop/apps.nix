@@ -4,6 +4,7 @@
   # Тюнинг Firefox под слабый процессор и приватность
   programs.firefox = {
     enable = true;
+    configPath = ".mozilla/firefox";
     policies = {
       DisableTelemetry = true;
       DisableFirefoxStudies = true;

@@ -47,12 +47,7 @@
 
   nixpkgs.config.allowUnfree = true;
 
-  nix.gc = {
-    automatic = true;
-    dates = "weekly";
-    options = "--delete-older-than 30d";
-  };
-
+  # Очистку мусора и поколений берет на себя nh clean
   system.stateVersion = "24.11";
 
   programs.nh = {

@@ -4,6 +4,8 @@
   # Контроль версий
   programs.git = {
     enable = true;
+    userName = "mestorixx";
+    userEmail = "mestorixx@chungie-laptop";
   };
 
   # Оболочка Bash и алиасы для удобства
