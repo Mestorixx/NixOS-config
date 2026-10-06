@@ -38,6 +38,8 @@
         "gfx.webrender.all" = true;
         "layers.acceleration.force-enabled" = true;
         "widget.dmabuf.wayland-drm-backend.enabled" = true;
+        # Intel HD 620 аппаратно не поддерживает AV1: выключаем его, чтобы YouTube отдавал VP9
+        "media.av1.enabled" = false;
 
         # Блокировка телеметрии и фоновых опросов
         "toolkit.telemetry.unified" = false;
@@ -81,7 +83,7 @@
 
     libreoffice
     krita
-    opentabletdriver
     woeusb-ng
+
   ];
 }

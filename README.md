@@ -17,36 +17,37 @@
 - `home/`
   - `hosts/chungie-laptop.nix` — профиль пользователя `mestorixx`, объединяющий модули.
   - `modules/`
-    - `desktop/gnome.nix` — GNOME dconf (тема, кнопки окон, хоткеи Flameshot) и декларативные расширения (AppIndicator, Vitals, Dash to Dock);
+    - `desktop/gnome.nix` — GNOME dconf (тема, кнопки окон, хоткеи Flameshot, Alt+Shift), расширения и кастомный пропатченный Ulauncher (транслитерация RU/EN, мгновенный поиск файлов через `fd`);
     - `desktop/apps.nix` — GUI-приложения и Firefox (VA-API аппаратное ускорение, блокировка телеметрии, uBlock Origin);
     - `gaming/minecraft.nix` — PrismLauncher, Legacy Launcher (KLauncher через `pkgs.fetchurl`), OpenJDK (Java 17, 21);
-    - `dev/default.nix` — окружение разработки: `direnv` + `nix-direnv`, `starship`, `zoxide`, `eza`, `bat`, `fzf`, `git`, `vscode`.
+    - `dev/default.nix` — окружение разработки: `direnv` + `nix-direnv`, `starship`, `zoxide`, `eza`, `bat`, `fzf`, `git`, `vscode`, `just`.
 
 ---
 
-## Управление системой через `nh` (Nix Helper)
+## Быстрая установка (Quick Start)
 
-Вся сборка и обслуживание теперь происходят через утилиту `nh`:
+Скрипт автоматически подхватывает конфигурацию железа (`hardware-configuration.nix`), настраивает симлинки в `/etc/nixos` и выполняет **умную адаптивную сборку**:
 
 ```bash
-# Применить конфигурацию системы (с визуальным диффом nvd)
-nh os switch
-
-# Собрать конфигурацию для следующей перезагрузки
-nh os boot
-
-# Очистить старые поколения (оставив последние 3 поколения и не старше 4 дней)
-nh clean all --keep 3
-
-# Обновить зависимости flake
-nix flake update
+git clone https://github.com/mestorixx/dotfiles.git
+cd dotfiles
+sudo ./install.sh
 ```
 
-Также доступны алиасы Justfile:
+> **Умная сборка:** скрипт анализирует количество потоков процессора (`nproc`) и объем RAM. На компактных/слабых система ($\le 4$ ядер / $\le 8$ ГБ RAM) сборка автоматически ограничивается (`--cores 3 -j 1`), чтобы рабочий стол не зависал, а музыка и браузер оставались плавными. На мощных многоядерных машинах включается максимальная скорость.
+
+---
+
+## Управление системой через `Just` и `nh`
+
+Все повседневные задачи автоматизированы через `Justfile` с адаптивным контролем нагрузки:
+
 ```bash
-just switch   # nh os switch
-just clean    # nh clean all --keep 3
-just check    # nix flake check
+just switch   # Умная сборка и переключение (авто-определение ядер и RAM)
+just boot     # Собрать конфигурацию для следующей перезагрузки
+just clean    # Очистить старые поколения (оставив последние 3)
+just update   # Обновить зависимости flake.lock
+just check    # Проверить синтаксис конфигурации
 ```
 
 ---
@@ -60,3 +61,8 @@ just check    # nix flake check
 use flake
 ```
 При входе в каталог с проектом окружение активируется автоматически, а при выходе — выгружается.
+
+---
+
+> Сделано с любовью Claude и Gemini ❤️
+

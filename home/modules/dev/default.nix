@@ -51,6 +51,9 @@
   programs.fzf = {
     enable = true;
     enableBashIntegration = true;
+    defaultCommand = "fd --type f --hidden --exclude .git";
+    fileWidget.command = "fd --type f --hidden --exclude .git";
+    changeDirWidget.command = "fd --type d --hidden --exclude .git";
   };
 
   # Изолированные dev-окружения для проектов (direnv + nix-direnv)
@@ -64,5 +67,8 @@
     vscode
     python3
     antigravity-cli
+    fd
+    ripgrep
+    just
   ];
 }

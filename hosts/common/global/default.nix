@@ -2,6 +2,7 @@
 
 {
   networking.networkmanager.enable = true;
+  networking.networkmanager.insertNameservers = [ "45.155.204.190" "95.182.120.241" "1.1.1.1" "8.8.8.8" ];
 
   time.timeZone = "Asia/Novosibirsk";
 
@@ -21,6 +22,7 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.systemd-boot.configurationLimit = 10;
+  boot.loader.timeout = 1;  # не ждать 5+ сек в меню загрузки
 
   security.rtkit.enable = true;
 
@@ -35,6 +37,17 @@
     options = "grp:alt_shift_toggle";
   };
 
+  # Тачпад: natural scroll + tap-to-click (как на MacBook)
+  services.libinput = {
+    enable = true;
+    touchpad = {
+      naturalScrolling = true;
+      tapping = true;
+      clickMethod = "clickfinger";  # 2 пальца = правый клик
+      disableWhileTyping = true;
+    };
+  };
+
   hardware.bluetooth = {
     enable = true;
     powerOnBoot = true;
@@ -43,6 +56,16 @@
   nix.settings = {
     experimental-features = [ "nix-command" "flakes" ];
     auto-optimise-store = true;
+    # Зеркала nix cache для России (cache.nixos.org часто недоступен)
+    substituters = [
+      "https://mirrors.ustc.edu.cn/nix-channels/store"
+      "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store"
+      "https://cache.nixos.org"
+    ];
+    trusted-public-keys = [
+      "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+    ];
+    connect-timeout = 5;
   };
 
   nixpkgs.config.allowUnfree = true;
