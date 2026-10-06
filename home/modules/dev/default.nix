@@ -8,6 +8,9 @@
       name = "mestorixx";
       email = "mestorixx@chungie-laptop";
     };
+    extraConfig = {
+      credential.helper = "!gh auth git-credential";
+    };
   };
 
   # Оболочка Bash и алиасы для удобства
