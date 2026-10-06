@@ -64,6 +64,17 @@ EOF
         return RenderResultListAction(result_list)'
     '';
   });
+
+  catppuccin-gtk-pkg = pkgs.catppuccin-gtk.override {
+    accents = [ "lavender" ];
+    size = "compact";
+    variant = "mocha";
+  };
+
+  catppuccin-papirus-pkg = pkgs.catppuccin-papirus-folders.override {
+    flavor = "mocha";
+    accent = "lavender";
+  };
 in
 {
   home.packages = with pkgs; [
@@ -73,6 +84,11 @@ in
     flameshot
     ulauncher-custom
 
+    # Цветовая тема Catppuccin Mocha Lavender
+    catppuccin-gtk-pkg
+    catppuccin-papirus-pkg
+    catppuccin-cursors.mochaLavender
+
     # Декларативные расширения GNOME
     gnomeExtensions.appindicator
     gnomeExtensions.vitals
@@ -81,7 +97,50 @@ in
     gnomeExtensions.tiling-shell
     gnomeExtensions.compiz-windows-effect
     gnomeExtensions.clipboard-indicator
+    gnomeExtensions.user-themes
   ];
+
+  # GTK 2/3 темы и курсоры
+  gtk = {
+    enable = true;
+    gtk4.theme = null;
+    theme = {
+      name = "catppuccin-mocha-lavender-compact";
+      package = catppuccin-gtk-pkg;
+    };
+    iconTheme = {
+      name = "Papirus-Dark";
+      package = catppuccin-papirus-pkg;
+    };
+    cursorTheme = {
+      name = "catppuccin-mocha-lavender-cursors";
+      package = pkgs.catppuccin-cursors.mochaLavender;
+      size = 24;
+    };
+  };
+
+  # Курсоры для всей системы (включая X11/Wayland)
+  home.pointerCursor = {
+    enable = true;
+    name = "catppuccin-mocha-lavender-cursors";
+    package = pkgs.catppuccin-cursors.mochaLavender;
+    size = 24;
+    gtk.enable = true;
+    x11.enable = true;
+  };
+
+  # Поддержка темы Catppuccin для GTK 4 / Libadwaita приложений (Nautilus, Настройки, Консоль и др.)
+  xdg.configFile = {
+    "gtk-4.0/assets".source = "${catppuccin-gtk-pkg}/share/themes/catppuccin-mocha-lavender-compact/gtk-4.0/assets";
+    "gtk-4.0/gtk.css".source = "${catppuccin-gtk-pkg}/share/themes/catppuccin-mocha-lavender-compact/gtk-4.0/gtk.css";
+    "gtk-4.0/gtk-dark.css".source = "${catppuccin-gtk-pkg}/share/themes/catppuccin-mocha-lavender-compact/gtk-4.0/gtk-dark.css";
+  };
+
+  # Подключение темы оболочки GNOME для расширения user-themes
+  home.file = {
+    ".local/share/themes/catppuccin-mocha-lavender-compact".source = "${catppuccin-gtk-pkg}/share/themes/catppuccin-mocha-lavender-compact";
+    ".themes/catppuccin-mocha-lavender-compact".source = "${catppuccin-gtk-pkg}/share/themes/catppuccin-mocha-lavender-compact";
+  };
 
   dconf.enable = true;
   dconf.settings = {
@@ -92,6 +151,10 @@ in
     "org/gnome/desktop/interface" = {
       color-scheme = "prefer-dark";
       enable-hot-corners = true;
+      gtk-theme = "catppuccin-mocha-lavender-compact";
+      icon-theme = "Papirus-Dark";
+      cursor-theme = "catppuccin-mocha-lavender-cursors";
+      cursor-size = 24;
     };
 
     "org/gnome/shell" = {
@@ -104,7 +167,12 @@ in
         "tilingshell@ferrarodomenico.com"
         "compiz-windows-effect@hermes83.github.com"
         "clipboard-indicator@tudmotu.com"
+        "user-theme@gnome-shell-extensions.gcampax.github.com"
       ];
+    };
+
+    "org/gnome/shell/extensions/user-theme" = {
+      name = "catppuccin-mocha-lavender-compact";
     };
 
     # Автоочистка корзины и временных файлов старше 30 дней (как в macOS)
