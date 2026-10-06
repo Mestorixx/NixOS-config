@@ -120,7 +120,8 @@
       # Визуальный комфорт и отступы
       window_padding_width = 12;
       placement_strategy = "center";
-      hide_window_decorations = "yes";
+      hide_window_decorations = "no";
+      wayland_titlebar_color = "background";
       confirm_os_window_close = 0;
 
       # Курсор
