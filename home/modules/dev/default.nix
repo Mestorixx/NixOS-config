@@ -100,6 +100,77 @@
     nix-direnv.enable = true;
   };
 
+  # Быстрый GPU-терминал с аппаратным ускорением и богатыми возможностями
+  programs.kitty = {
+    enable = true;
+    themeFile = "Catppuccin-Mocha";
+
+    font = {
+      name = "JetBrainsMono Nerd Font";
+      size = 11.5;
+    };
+
+    settings = {
+      # Оптимизация задержки и энергопотребления (Intel HD 620)
+      repaint_delay = 10;
+      input_delay = 2;
+      sync_to_monitor = "yes";
+      wayland_enable_ime = "no";
+
+      # Визуальный комфорт и отступы
+      window_padding_width = 12;
+      placement_strategy = "center";
+      hide_window_decorations = "yes";
+      confirm_os_window_close = 0;
+
+      # Курсор
+      cursor_shape = "beam";
+      cursor_blink_interval = 0;
+
+      # Прокрутка и буфер
+      scrollback_lines = 10000;
+      wheel_scroll_multiplier = "3.0";
+      touch_scroll_multiplier = "3.0";
+
+      # Звуки
+      enable_audio_bell = "no";
+      visual_bell_duration = "0.0";
+
+      # Вкладки и сплиты
+      tab_bar_edge = "top";
+      tab_bar_style = "powerline";
+      tab_powerline_style = "slanted";
+      active_tab_font_style = "bold";
+
+      # Ссылки и мышь
+      url_style = "curly";
+      open_url_with = "default";
+      detect_urls = "yes";
+      copy_on_select = "clipboard";
+      strip_trailing_spaces = "smart";
+      mouse_hide_wait = "3.0";
+    };
+
+    keybindings = {
+      # Сплиты (разбиение окна)
+      "ctrl+shift+enter" = "new_window";
+      "ctrl+shift+w" = "close_window";
+      "ctrl+shift+[" = "previous_window";
+      "ctrl+shift+]" = "next_window";
+
+      # Вкладки
+      "ctrl+shift+t" = "new_tab";
+      "ctrl+shift+q" = "close_tab";
+      "ctrl+shift+right" = "next_tab";
+      "ctrl+shift+left" = "previous_tab";
+
+      # Изменение размера шрифта
+      "ctrl+equal" = "change_font_size all +1.0";
+      "ctrl+minus" = "change_font_size all -1.0";
+      "ctrl+0" = "change_font_size all 0";
+    };
+  };
+
   home.packages = with pkgs; [
     vscode
     vscode-extensions.catppuccin.catppuccin-vsc

@@ -213,6 +213,7 @@ in
         "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/spotify/"
         "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/telegram/"
         "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/ulauncher/"
+        "/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/kitty/"
       ];
     };
     "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/flameshot" = {
@@ -239,6 +240,11 @@ in
       binding = "<Super>t";
       command = "${ulauncher-custom}/bin/ulauncher-toggle";
       name = "Ulauncher";
+    };
+    "org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/kitty" = {
+      binding = "<Super>Return";
+      command = "kitty";
+      name = "Kitty";
     };
   };
 
