@@ -93,9 +93,17 @@
     };
   };
 
-  # Тюнинг под ZRAM: убирает микрофризы, мгновенный отклик при нехватке памяти
+  # Исправляет баг драйвера Intel i915 на HD 620:
+  # Отключает Panel Self Refresh (PSR), который вызывал ошибку «Atomic update failure»
+  # и вешал экран на 1-2 секунды при переключении между окнами Firefox/Electron.
+  boot.kernelParams = [
+    "i915.enable_psr=0"
+    "i915.enable_fbc=1"
+  ];
+
+  # Тюнинг под ZRAM: адекватная swappiness без избыточного сжатия в фоне
   boot.kernel.sysctl = {
-    "vm.swappiness" = 180;
+    "vm.swappiness" = 80;
     "vm.watermark_boost_factor" = 0;
     "vm.watermark_scale_factor" = 125;
     "vm.page-cluster" = 0;
